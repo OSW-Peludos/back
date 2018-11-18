@@ -14,6 +14,7 @@ var errorHandler = require('errorhandler')
 var app = express()
 var indexRouter = require('./routes');
 var registryRouter = require('./routes/registry');
+var listPetsRouter = require('./routes/listPets');
 
 require('dotenv').load();
 
@@ -44,6 +45,8 @@ mongoose.connect(mongoUrl, { promiseLibrary: require('bluebird') })
 
 app.use('/', indexRouter);
 app.use('/api/registry', registryRouter);
+app.use('/api/list', listPetsRouter);
+
 
 // error handling middleware should be loaded after the loading the routes
 if (app.get('env') === 'development') {
