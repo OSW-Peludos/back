@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const PetRegistry = require('../models/PetRegisty');
 
-//http://localhost:3000/api/list/?status=found&limit=10&skip=2&order=-1
+//http://localhost:3001/api/list/?status=lost&limit=10&skip=0&order=-1
 router.get('/', function (req, res) {
     // we query the status (lost / found /unknown) and the pagination params using req.query
     const status = req.query.status;
