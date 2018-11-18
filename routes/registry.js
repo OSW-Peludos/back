@@ -33,8 +33,6 @@ router.post('/save_pet/', function (req, res) {
         status: req.body.status
     };
 
-    console.log(newRegistry);
-
     PetRegistry.findOneAndUpdate({ _id: newRegistry._id }, newRegistry, { upsert: true }, function (err, entry) {
         if (err) {
             console.log(error);
