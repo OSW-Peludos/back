@@ -3,6 +3,7 @@ var express = require('express')
 var routes = require('./routes')
 var path = require('path')
 const mongoose = require('mongoose');
+var cors = require('cors');
 
 var logger = require('morgan')
 var methodOverride = require('method-override')
@@ -35,6 +36,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 //app.use(multer())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(cors());
 
 //We connect to the database
 mongoose.Promise = require('bluebird');
