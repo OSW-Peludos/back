@@ -12,7 +12,7 @@ describe('App', function () {
     describe('/api/registry/save_pet', function () {
         it('responds with status 200 when inserting found pet', function (done) {
             const newRegistry = {
-                _id: "test_registry_found_ex",
+                _id: "test_registry",
                 date: new Date(),
                 coordinates: [40.22, 3.87],
                 animal: {

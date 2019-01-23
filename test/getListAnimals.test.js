@@ -21,10 +21,12 @@ describe('App', function () {
     });
 
     describe('/api/list?status=lost&limit=10&skip=2&order=-1', function () {
-        it('responds with status 200 requesting the lost pets', function (done) {
+        it('retrieves a list of pets and the count', function (done) {
             chai.request(app)
                 .get('/api/list?status=found&limit=10&skip=2&order=-1')
                 .end(function (err, res) {
+                    expect(res.body.list).not.undefined;
+                    expect(res.body.count).not.undefined;
                     expect(res).to.have.status(200);
                     done();
                 });
