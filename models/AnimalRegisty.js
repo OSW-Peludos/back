@@ -39,7 +39,7 @@ const Contact = new Schema({
     }
 });
 
-const PetRegistry = new Schema({
+const AnimalRegistry = new Schema({
     _id: String,
     coordinates: {
         type: [Number]
@@ -61,6 +61,6 @@ const PetRegistry = new Schema({
 },
     { collection: 'pet-registry' });
 
-PetRegistry.index({ '$**': 'text' });
+AnimalRegistry.index({ '$**': 'text' });
 
-module.exports = mongoose.model('PetRegistry', PetRegistry);
+module.exports = mongoose.model('AnimalRegistry', AnimalRegistry);

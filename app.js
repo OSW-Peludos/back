@@ -1,41 +1,41 @@
-var http = require('http')
-var express = require('express')
-var routes = require('./routes')
-var path = require('path')
+const http = require('http')
+const express = require('express')
+const routes = require('./routes')
+const path = require('path')
 const mongoose = require('mongoose');
-var cors = require('cors');
+const cors = require('cors');
 
-var logger = require('morgan')
-var methodOverride = require('method-override')
-var session = require('express-session')
-var bodyParser = require('body-parser')
-var multer = require('multer')
-var errorHandler = require('errorhandler')
+const logger = require('morgan');
+const methodOverride = require('method-override');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const errorHandler = require('errorhandler');
 
-var app = express()
-var indexRouter = require('./routes');
-var registryRouter = require('./routes/registry');
-var listPetsRouter = require('./routes/listPets');
-
+const app = express();
+const indexRouter = require('./routes');
+const registryRouter = require('./routes/registry');
+const listPetsRouter = require('./routes/listAnimals');
+const findRecordRouter = require('./routes/findAnimalRecord');
 require('dotenv').load();
 
 
 // all environments
-app.set('port', process.env.PORT || 3001)
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'jade')
+app.set('port', process.env.PORT || 3001);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-app.use(logger('dev'))
-app.use(methodOverride())
+app.use(logger('dev'));
+app.use(methodOverride());
 app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: 'uwotm8'
-}))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(multer())
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 //We connect to the database
@@ -48,6 +48,7 @@ mongoose.connect(mongoUrl, { promiseLibrary: require('bluebird') })
 app.use('/', indexRouter);
 app.use('/api/registry', registryRouter);
 app.use('/api/list', listPetsRouter);
+app.use('/api/animal', findRecordRouter);
 
 
 // error handling middleware should be loaded after the loading the routes
@@ -55,7 +56,7 @@ if (app.get('env') === 'development') {
   app.use(errorHandler())
 }
 
-var server = http.createServer(app)
+const server = http.createServer(app);
 server.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'))
 })
