@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const PetRegistry = require('../models/AnimalRegisty');
-
+const mongoose = require('mongoose');
 
 router.get('/test', function (req, res, next) {
     res.json({ title: 'Express' });
@@ -10,7 +10,6 @@ router.get('/test', function (req, res, next) {
 
 
 router.post('/save_pet/', function (req, res) {
-    let _id = req.body._id || "invalid_id";
     let animal;
     let contact;
     if (req.body.animal) {
@@ -25,7 +24,7 @@ router.post('/save_pet/', function (req, res) {
     }
 
     const newRegistry = {
-        _id: _id,
+        _id : mongoose.Types.ObjectId(),
         date: req.body.date,
         coordinates: req.body.coordinates,
         animal: animal,
