@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+var ObjectIdSchema = Schema.ObjectId;
 
 const Animal = new Schema({
     _id: {
@@ -40,7 +41,8 @@ const Contact = new Schema({
 });
 
 const AnimalRegistry = new Schema({
-    _id: String,
+        _id:    {type:ObjectIdSchema, default: function () { return new ObjectId()} }
+        ,
     coordinates: {
         type: [Number]
     },
