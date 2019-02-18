@@ -1,7 +1,7 @@
 const mockingoose = require('mockingoose').default;
 const httpMock = require('../../utils/testing.mock');
-const Controller = require('../animals.controller')
-const Model = require('../animals.model')
+const animalController = require('../animals.controller')
+const animalModel = require('../animals.model')
 const AnimalsRouter = require('../animals.routes')
 
 
@@ -15,7 +15,7 @@ describe('lola', () => {
 describe('Animals unit testing', () => {
   beforeEach(() => mockingoose.resetAll());
 
-  const mockedData = [{
+  const mockedData = {
     "_id": "5c67ff7d59c98e40d3072e06",
     "animal": {
       "size": "small",
@@ -35,25 +35,42 @@ describe('Animals unit testing', () => {
     ],
     "date": "2019-02-16T12:15:34.431Z",
     "status": "lost"
-  }]
+  }
   describe('Model test', () => {
-
     it('Model should list all animals', async () => {
+      mockingoose.AnimalRegistry.toReturn([mockedData])
 
-      mockingoose.AnimalRegistry.toReturn(mockedData)
-
-      const list = await Model.findAll({})
+      const list = await animalModel.findAll({})
 
       expect(list).not.toBeNull()
       expect(list.length).toBeGreaterThan(0)
+    })
+
+    it('Model should list selected animal', async ()=>{
+      const id="5c67ff7d59c98e40d3072e06";
+      mockingoose.AnimalRegistry.toReturn(mockedData, 'findOne')
+
+      const animal = await animalModel.findOne(id)
+
+      expect(animal).not.toBeUndefined()
+    })
+    
+    it('Model should throw id error', async ()=>{
+      const id="fakeId";
+      try {
+        await animalModel.findOne(id)
+      } catch (error) {
+        expect(error.message).toContain('Invalid ID')
+      }
+     
     })
   })
 
   describe('Controller test', () => {
     it('Controller should list all animals', async () => {
-      mockingoose.AnimalRegistry.toReturn(mockedData)
+      mockingoose.AnimalRegistry.toReturn([mockedData])
 
-      const animals = await Controller.findAll({ query: {} })
+      const animals = await animalController.findAll({ query: {} })
 
       expect(animals).not.toBeNull()
       expect(animals.list).not.toBeNull()
@@ -63,7 +80,7 @@ describe('Animals unit testing', () => {
 
   describe('router test', () => {
     it('router should list all animals', async () => {
-      mockingoose.AnimalRegistry.toReturn(mockedData)
+      mockingoose.AnimalRegistry.toReturn([mockedData])
       const request = httpMock.createRequest({
         method: 'GET',
         url: '/',
