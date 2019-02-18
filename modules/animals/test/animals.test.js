@@ -4,14 +4,6 @@ const animalController = require('../animals.controller')
 const animalModel = require('../animals.model')
 const AnimalsRouter = require('../animals.routes')
 
-
-describe('lola', () => {
-
-  it('shouldWork', () => {
-    expect(true).toBeTruthy()
-  })
-})
-
 describe('Animals unit testing', () => {
   beforeEach(() => mockingoose.resetAll());
 
@@ -88,10 +80,10 @@ describe('Animals unit testing', () => {
     
     it('Controller should throw id error', async ()=>{
       const id="fakeId";
+
       try {
         await animalController.findOne({params:{id}})
       } catch (error) {
-        console.log(error)
         expect(error.error).toContain('Invalid ID')
         expect(error.code).toBe(400)
       }
@@ -117,6 +109,46 @@ describe('Animals unit testing', () => {
         expect(response.statusCode).toBe(200)
         expect(data.count).toBe(1)
       })
+    })
+
+    it('router should list selected animal', async ()=>{
+      mockingoose.AnimalRegistry.toReturn(mockedData, 'findOne')
+      const request = httpMock.createRequest({
+        method: 'GET',
+        url: '/5c67ff7d59c98e40d3072e06',
+        body: {},
+        query: {}
+      })
+      const response = httpMock.createResponse();
+
+      AnimalsRouter(request, response, (err) => {
+        expect(err).toBeFalsy()
+      })
+
+      response.on('end', (data) => {
+        expect(response.statusCode).toBe(200)
+        expect(data).not.toBeUndefined()
+      })
+    })
+    
+    it('router should throw id error', async ()=>{
+      const request = httpMock.createRequest({
+        method: 'GET',
+        url: '/fakeID',
+        body: {},
+        query: {}
+      })
+      const response = httpMock.createResponse();
+
+      AnimalsRouter(request, response, (err) => {
+        expect(err).toBeFalsy()
+      })
+
+      response.on('end', (data) => {
+        expect(response.statusCode).toBe(400)
+        expect(data.error).toContain('Invalid ID')
+      })
+     
     })
   })
 })
