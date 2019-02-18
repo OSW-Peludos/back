@@ -23,6 +23,11 @@ async function findOne({params}){
   const { id } = params;
   try {
     const animal = await AnimalsModel.findOne(id)
+
+    if(!animal){
+      return Promise.reject({code: STATUS.NOT_FOUND, message: 'Not found'})
+    } 
+
     return animal
     
   } catch (error) {

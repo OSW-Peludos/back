@@ -56,6 +56,16 @@ describe('Animals unit testing', () => {
       }
      
     })
+    
+    it('Model should throw 404', async ()=>{
+      const id="5c67ff7d59c98e40d3072e06";
+      try {
+        await animalModel.findOne(id)
+      } catch (error) {
+        expect(error.message).toContain('Not found')
+      }
+     
+    })
   })
 
   describe('Controller test', () => {
@@ -86,6 +96,16 @@ describe('Animals unit testing', () => {
       } catch (error) {
         expect(error.error).toContain('Invalid ID')
         expect(error.code).toBe(400)
+      }
+     
+    })
+
+    it('Controller should return 404', async ()=>{
+      const id="5c67ff7d59c98e40d3072e06";
+      try {
+        await animalController.findOne({params:{id}})
+      } catch (error) {
+        expect(error.message).toContain('Not found')
       }
      
     })
@@ -147,6 +167,25 @@ describe('Animals unit testing', () => {
       response.on('end', (data) => {
         expect(response.statusCode).toBe(400)
         expect(data.error).toContain('Invalid ID')
+      })
+     
+    })
+    it('Controller should return 404', async ()=>{
+      const request = httpMock.createRequest({
+        method: 'GET',
+        url: '/5c67ff7d59c98e40d3072e06',
+        body: {},
+        query: {}
+      })
+      const response = httpMock.createResponse();
+
+      AnimalsRouter(request, response, (err) => {
+        expect(err).toBeFalsy()
+      })
+
+      response.on('end', (data) => {
+        expect(response.statusCode).toBe(404)
+        expect(data).not.toBeUndefined()
       })
      
     })
