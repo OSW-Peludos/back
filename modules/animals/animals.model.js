@@ -67,8 +67,16 @@ function listAllAnimals({status = 'lost', skip, limit, order = -1}){
     .skip(skip)
     .lean()
 }
+function findAnimal(id){
+  if(!mongoose.Types.ObjectId.isValid(id)){
+    throw errorGenerator('Invalid ID')
+  }
+
+  return Animal.findById(id).lean()
+}
 
 module.exports = {
   findAll: listAllAnimals,
+  findOne: findAnimal,
 }
 
