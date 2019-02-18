@@ -76,6 +76,27 @@ describe('Animals unit testing', () => {
       expect(animals.list).not.toBeNull()
       expect(animals.count).toBe(1)
     })
+
+    it('Controller should list selected animal', async ()=>{
+      const id="5c67ff7d59c98e40d3072e06";
+      mockingoose.AnimalRegistry.toReturn(mockedData, 'findOne')
+
+      const animal = await animalController.findOne({params:{id}})
+
+      expect(animal).not.toBeUndefined()
+    })
+    
+    it('Controller should throw id error', async ()=>{
+      const id="fakeId";
+      try {
+        await animalController.findOne({params:{id}})
+      } catch (error) {
+        console.log(error)
+        expect(error.error).toContain('Invalid ID')
+        expect(error.code).toBe(400)
+      }
+     
+    })
   })
 
   describe('router test', () => {
