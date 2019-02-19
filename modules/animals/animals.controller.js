@@ -34,8 +34,41 @@ async function findOne({params}){
     return Promise.reject({code: STATUS.BAD_REQUEST, error: error.message })
   }
 }
+/**
+ * Save animal
+ * @param {Request} req 
+ */
+async function save({body}){
+  const {animal, contact, date, coordinates, status } = body
+  
+  try {
+    if(!animal){
+      return Promise.reject({code: STATUS.BAD_REQUEST, message: 'Animal required'})
+    }
+    if(!contact){
+      return Promise.reject({code: STATUS.BAD_REQUEST, message: 'Contact required'})
+    }
+  
+    const animalRegistry = {
+      date,
+      coordinates,
+      animal,
+      contact,
+      status
+    }
+
+    const animalCreated = await AnimalsModel.save(animalRegistry);
+    return animalCreated
+  } catch (error) {
+    
+    return Promise.reject({error: error.message})
+  }
+
+
+}
 
 module.exports = {
   findAll,
   findOne,
+  save,
 }

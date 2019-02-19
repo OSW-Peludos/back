@@ -75,8 +75,13 @@ function findAnimal(id){
   return Animal.findById(id).lean()
 }
 
+function saveAnimal(animal){
+  return Animal.create(animal)
+}
+
 module.exports = {
   findAll: listAllAnimals,
   findOne: findAnimal,
+  save: saveAnimal,
 }
 

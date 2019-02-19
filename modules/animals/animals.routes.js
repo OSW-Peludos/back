@@ -24,5 +24,15 @@ AnimalsRouting.get('/:id', async (req, res)=>{
   }
 })
 
+AnimalsRouting.post('/', async (req, res)=>{
+  try {
+    const animalsInfo = await Animals.save(req);
+    res.statusCode = STATUS.OK;
+    res.send({...animalsInfo})
+  } catch (error) {
+    errorSender(res, error)
+  }
+})
+
 
 module.exports = AnimalsRouting
