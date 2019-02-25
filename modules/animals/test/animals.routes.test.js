@@ -83,12 +83,58 @@ describe('router test', () => {
     })
    
   })
-  it('Router should save', async ()=>{
+  it('Router should save', async (done)=>{
     const {_id, ...dataToSave} = mockedData;
 
     const request = httpMock.createRequest({
       method: 'POST',
       url: '/',
+      body: dataToSave,
+      query: {}
+    })
+    const response = httpMock.createResponse();
+
+    AnimalsRouter(request, response, (err) => {
+      expect(err).toBeFalsy()
+    })
+
+    response.on('end', (data) => {
+      expect(response.statusCode).toBe(200)
+      expect(data).not.toBeUndefined()
+      done()
+    })
+  })
+
+  it('Router should throw error on save', async (done)=>{
+    const {_id, ...dataToSave} = mockedData;
+    mockingoose.AnimalRegistry.toReturn(new Error('error!'), 'save')
+
+    const request = httpMock.createRequest({
+      method: 'POST',
+      url: '/',
+      body: dataToSave,
+      query: {}
+    })
+    const response = httpMock.createResponse();
+
+    AnimalsRouter(request, response, (err) => {
+      expect(err).not.toBeFalsy()
+    })
+
+    response.on('end', (data) => {
+      expect(response.statusCode).toBe(500)
+      expect(data).not.toBeUndefined()
+      done()
+    })
+  })
+  
+  it('Router should throw error', async ()=>{
+    const {_id, ...dataToSave} = mockedData;
+    mockingoose.AnimalRegistry.toReturn({...mockedData, status: 'found'}, 'findOneAndUpdate')
+
+    const request = httpMock.createRequest({
+      method: 'PATCH',
+      url: '/5c67ff7d59c98e40d3072e06',
       body: dataToSave,
       query: {}
     })

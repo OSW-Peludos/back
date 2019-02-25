@@ -79,9 +79,14 @@ function saveAnimal(animal){
   return Animal.create(animal)
 }
 
+function updateRegistry(id, updatedFields ){
+  return Animal.findByIdAndUpdate(id, {$set: {...updatedFields}}, {new: true})
+}
+
 module.exports = {
   findAll: listAllAnimals,
   findOne: findAnimal,
   save: saveAnimal,
+  update: updateRegistry,
 }
 

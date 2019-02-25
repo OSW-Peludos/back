@@ -35,4 +35,15 @@ AnimalsRouting.post('/', async (req, res)=>{
 })
 
 
+AnimalsRouting.patch('/:id', async (req, res)=>{
+  try {
+    const animalsInfo = await Animals.update(req);
+    res.statusCode = STATUS.OK;
+    res.send({...animalsInfo})
+  } catch (error) {
+    errorSender(res, error)
+  }
+})
+
+
 module.exports = AnimalsRouting

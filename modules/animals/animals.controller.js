@@ -63,12 +63,26 @@ async function save({body}){
     
     return Promise.reject({error: error.message})
   }
+}
+/**
+ * Update animal
+ * @param {Request} req 
+ */
+function update({body, params}){
+  const { id } = params;
+  
+  try {
+    return AnimalsModel.update(id, {...body})
 
-
+  } catch (error) {
+    return Promise.reject({code: STATUS.BAD_REQUEST, error: error.message })
+  }
+  
 }
 
 module.exports = {
   findAll,
   findOne,
   save,
+  update,
 }

@@ -59,7 +59,7 @@ describe('Controller unit test', () => {
 
   })
   
-  it('Controller should require animal', async () => {
+  it('Controller should require animal on save', async () => {
     const { _id, animal, ...rest } = mockedData
     
     try {
@@ -71,7 +71,7 @@ describe('Controller unit test', () => {
 
   })
 
-  it('Controller should require contact', async () => {
+  it('Controller should require contact on save', async () => {
     const { _id, contact, ...rest } = mockedData
     
     try {
@@ -83,12 +83,12 @@ describe('Controller unit test', () => {
 
   })
   
-  it('Controller should throw error', async () => {
+  it('Controller should throw error on save', async () => {
     const { _id, ...rest } = mockedData
     const errorMsg = 'Uncatched error'
 
     mockingoose.AnimalRegistry.toReturn(new Error(errorMsg), 'create')
-    
+
     try {
       await animalController.save({body: rest})
       
@@ -98,4 +98,16 @@ describe('Controller unit test', () => {
 
   })
   
+  it('Controller should update an element', async () => {
+    const {_id } = mockedData
+    mockingoose.AnimalRegistry.toReturn({...mockedData, status: 'found'}, 'findOneAndUpdate')
+
+    try {
+      const updatedAnimal = await animalController.update({body: {status: 'found'}, params: {id: _id}})
+      expect(updatedAnimal.status).toContain('found')
+    } catch (error) {
+      if (error) fail(error)
+    }
+
+  })
 })

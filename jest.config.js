@@ -13,6 +13,7 @@ module.exports = {
   coverageDirectory: '<rootDir>/coverage',
   collectCoverageFrom: [
     '**/*.js',
+    '!app.js',
     '!**/*.mock.js',
     '!**/index.js',
     '!**/routes/**',
