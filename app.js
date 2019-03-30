@@ -12,7 +12,6 @@ const errorHandler = require('errorhandler');
 const helmet = require('helmet')
 
 const app = express();
-const indexRouter = require('./routes');
 const MainRoutes = require('./router');
 require('dotenv').load();
 
@@ -41,11 +40,6 @@ mongoUrl = process.env['MONGODB_URL']
 mongoose.connect(mongoUrl, { promiseLibrary: require('bluebird') })
   .then(() => console.log('Mongodb connection succesful'))
   .catch((err) => console.error(err));
-
-app.use('/', indexRouter);
-// app.use('/api/registry', registryRouter);
-// app.use('/api/list', listPetsRouter);
-// app.use('/api/animal', findRecordRouter);
 
 app.use('/api/v1', MainRoutes)
 
