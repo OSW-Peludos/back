@@ -7,6 +7,8 @@ const STATUS = require('http-status');
  */
 async function findAll({query = {}}){
   const queryData = { status, skip, limit, order } = query
+  queryData.skip = parseInt(skip)
+  queryData.limit = parseInt(limit)
 
   const animalsList = await AnimalsModel.findAll(queryData)
   return {
